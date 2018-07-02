@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Drawing Test</title>
+
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        canvas {
+            background: #eee;
+            display: block;
+            margin: 0 auto;
+            border: 1px solid black;
+        }
+
+        #start_button {
+            position:absolute;
+            top: 100px;
+            left:400px;
+        }
+    </style>
+
+    <script type="text/javascript" src="js/main.js"></script>
+</head>
+
+
+<body onload="main()">
+    <canvas id="Canvas" width="1000" height="800">
+        Your browser does not support the canvas element.
+    </canvas>
+    <button onclick="setInterval(sortLoop(), 1)" id="start_button">Start</button>
+
+</body>
+</html>
