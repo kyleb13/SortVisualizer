@@ -11,7 +11,7 @@
             margin: 0;
         }
 
-        canvas {
+        #Canvas {
             background: #eee;
             display: block;
             margin: 0 auto;
@@ -30,10 +30,10 @@
 
 
 <body onload="main()">
-    <canvas id="Canvas" width="1000" height="800">
+    <canvas id="Canvas" width="1000" height="820">
         Your browser does not support the canvas element.
     </canvas>
-    <button onclick="setInterval(sortLoop(), 1)" id="start_button">Start</button>
+    <button onclick="sortLoop()" id="start_button">Start</button>
 
 </body>
 </html>
