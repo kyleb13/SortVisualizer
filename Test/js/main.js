@@ -2,15 +2,25 @@
 var ctx;
 var vals = [];
 var current_index = 0;
+var speedSlider;
+var animationSpeed = 50;
+var keepSorting;
+var algorithm = 1;
 
-function main() {
-    canvas = document.getElementById("Canvas");
-    ctx = canvas.getContext("2d");
-
+function main(inital_load) {
+    if (inital_load) {
+        canvas = document.getElementById("Canvas");
+        ctx = canvas.getContext("2d");
+        speedSlider = document.getElementById("speedSlider");
+    } else {
+        vals = []; 
+        current_index = 0;
+    }
     for (var x = 0; x < 100;x++) {
         vals.push(randInt(100) + 1);
     }
     draw();
+    updateSpeedText();
 }
 
 
@@ -67,9 +77,20 @@ function getRGBString(value) {
     return rgbString;
 }
 
+function animateSort() {
+    keepSorting = setInterval(sortLoop, animationSpeed);
+}
+
+function setAlgorithm(alg_num) {
+    algorithm = alg_num;
+}
+
 function sortLoop() {
     selectSortStep(current_index++);
     draw();
+    if (current_index == vals.length) {
+        clearInterval(keepSorting);
+    }
 }
 
 function selectSortStep(idx) {
@@ -84,6 +105,12 @@ function selectSortStep(idx) {
         vals[idx] = vals[minidx];
         vals[minidx] = temp;
     }
+}
+
+function updateSpeedText() {
+    var speedli = document.getElementById("animationSpeed");
+    speedli.innerHTML = "Animation Speed: " + speedSlider.value + " ms";
+    animationSpeed = speedSlider.value;
 }
 
 function randInt(max) {
