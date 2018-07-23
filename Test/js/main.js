@@ -1,17 +1,31 @@
-﻿var canvas;
+﻿//canvas that is drawn on
+var canvas;
+//drawing context of canvas
 var ctx;
+//array of values to be sorted
 var vals = [];
+//current sort index, for iterative algorithms
 var current_index = 0;
+//slider that controls animation speed
 var speedSlider;
 var animationSpeed = 50;
 var keepSorting;
 var algorithm = 1;
+var numBox;
+var runButton;
+var stepButton;
+var stepBox;
 
 function main(inital_load) {
     if (inital_load) {
         canvas = document.getElementById("Canvas");
         ctx = canvas.getContext("2d");
         speedSlider = document.getElementById("speedSlider");
+        runButton = document.getElementById("start_button");
+        stepButton = document.getElementById("step_button");
+        stepBox = document.getElementById("step_box");
+        numBox = document.getElementById("num_box");
+        ctx.textBaseline = "top";
     } else {
         vals = []; 
         current_index = 0;
@@ -30,6 +44,16 @@ function draw() {
     for (var i = 0; i < 100; i++) {
         ctx.fillStyle = getRGBString(vals[i]);
         ctx.fillRect(i * 10, canvas.height, 8, -(vals[i] * 8));
+        if (numBox.checked) {
+            ctx.save();
+            ctx.font = "8px mySquareFont";
+            ctx.fillStyle = "black";
+            ctx.translate(i * 10 +4 /*4 is to center the text over bar*/, canvas.height - (vals[i] * 8));
+            ctx.textAlignment = "center";
+            ctx.rotate(-45*(Math.PI / 180));
+            ctx.fillText(vals[i], 0, -8);
+            ctx.restore();
+        }
     }
 }
 
@@ -78,11 +102,33 @@ function getRGBString(value) {
 }
 
 function animateSort() {
-    keepSorting = setInterval(sortLoop, animationSpeed);
+    if (!isSorted()) {
+        if (runButton.innerHTML == "▶ Start Sorting") {
+            keepSorting = setInterval(sortLoop, animationSpeed);
+            runButton.innerHTML = "❚❚ Pause Sorting";
+        } else if (runButton.innerHTML == "❚❚ Pause Sorting") {
+            clearInterval(keepSorting);
+            runButton.innerHTML = "▶ Start Sorting";
+        }
+    }
 }
 
 function setAlgorithm(alg_num) {
     algorithm = alg_num;
+}
+
+function handleStepBoxChange() {
+    if (stepBox.checked) {
+        runButton.disabled = true;
+        stepButton.disabled = false;
+        if (runButton.innerHTML == "❚❚ Pause Sorting") {
+            clearInterval(keepSorting);
+            runButton.innerHTML = "▶ Start Sorting";
+        }
+    } else {
+        runButton.disabled = false;
+        stepButton.disabled = true;
+    }
 }
 
 function sortLoop() {
@@ -90,6 +136,7 @@ function sortLoop() {
     draw();
     if (current_index == vals.length) {
         clearInterval(keepSorting);
+        runButton.innerHTML = "▶ Start Sorting";
     }
 }
 
@@ -111,8 +158,21 @@ function updateSpeedText() {
     var speedli = document.getElementById("animationSpeed");
     speedli.innerHTML = "Animation Speed: " + speedSlider.value + " ms";
     animationSpeed = speedSlider.value;
+    if (runButton.innerHTML == "❚❚ Pause Sorting") {
+        clearInterval(keepSorting);
+        keepSorting = setInterval(sortLoop, animationSpeed);
+    }
 }
 
 function randInt(max) {
     return Math.floor(Math.random() * Math.floor(max));
+}
+
+function isSorted() {
+    for (var i = 1; i < vals.length; i++) {
+        if (vals[i - 1] > vals[i]) {
+            return false;
+        }
+    }
+    return true;
 }

@@ -40,6 +40,14 @@
             width:250px;
         }
 
+        #start_button:disabled {
+            filter: blur(1px) grayscale(100%);
+        }
+
+        #step_button:disabled {
+            filter: blur(1px) grayscale(100%);
+        }
+
         div.content {
             position:relative;
         }
@@ -91,8 +99,12 @@
         <!-- Contains all of the buttons for interacting with the sort program -->
         <div class="gui" align="left">
             <ul>
-                <li><button onclick="animateSort()" id="start_button">Start Sorting</button></li>
+                <li><div id="hide_start"><button onclick="animateSort()" id="start_button">▶ Start Sorting</button></div></li>
                 <li><button onclick="main(false)">Reset</button></li>
+                <li><input type="checkbox" id="num_box" onchange="draw()" />Show Array Values</li>
+                <li><input type="checkbox" id="step_box" onchange="handleStepBoxChange()" />Step Mode</li>
+                <li><input type="checkbox" id="verbose_box" onchange="" />Verbose Mode</li>
+                <li><button id="step_button" onclick="sortLoop()" disabled="true">👣 Step</button></li>
                 <li>
                     <div id="animationSpeed">Animation Speed:<br /></div>
                     <input onchange="updateSpeedText()" id="speedSlider" type="range" min="0" max="200" value="50" step="5" />
